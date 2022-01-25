@@ -2,6 +2,7 @@ const express = require('express');
 const bp = require('body-parser');
 const csvtojson = require('csvtojson');
 const emsDB = require('./database/connect');
+const partsRouter = require('./routes/parts');
 
 const app = express();
 
@@ -16,6 +17,8 @@ emsDB.connect(()=>{
 //bodyparser
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
+
+app.use('/',partsRouter);
 
 app.listen(4000,()=>{
     console.log('Server is listening to port 4000 ...');
