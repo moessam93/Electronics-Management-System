@@ -23,7 +23,8 @@ const { addTaxonomy,
     addStatus,
     getStatus,
     updateStatus,
-    deleteStatus
+    deleteStatus,
+    exportParts
 } = require('../controllers/parts');
 
 router.route('/taxonomy').post(addTaxonomy).get(getTaxonomy).patch(updateTaxonomy).delete(deleteTaxonomy);
@@ -32,4 +33,5 @@ router.route('/price').post(addPrice).get(getPrice).patch(updatePrice).delete(de
 router.route('/stock').post(addStock).get(getStock).patch(updateStock).delete(deleteStock);
 router.route('/supplier').post(addSupplier).get(getSupplier).patch(updateSupplier).delete(deleteSupplier);
 router.route('/status').post(addStatus).get(getStatus).patch(updateStatus).delete(deleteStatus);
+router.route('/export_parts').get(exportParts);
 module.exports = router;

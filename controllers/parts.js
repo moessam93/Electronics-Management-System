@@ -453,7 +453,7 @@ const exportParts = (req, res) => {
                 if (err) {
                     throw err;
                 }
-                res.status(200).json(result);
+                res.status(200).json(result[0]);
             })
         })
     }
