@@ -32,5 +32,4 @@ router.route('/price').post(addPrice).get(getPrice).patch(updatePrice).delete(de
 router.route('/stock').post(addStock).get(getStock).patch(updateStock).delete(deleteStock);
 router.route('/supplier').post(addSupplier).get(getSupplier).patch(updateSupplier).delete(deleteSupplier);
 router.route('/status').post(addStatus).get(getStatus).patch(updateStatus).delete(deleteStatus);
-
 module.exports = router;
