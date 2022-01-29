@@ -1,8 +1,8 @@
 const express = require('express');
 const bp = require('body-parser');
-const csvtojson = require('csvtojson');
 const emsDB = require('./database/connect');
 const partsRouter = require('./routes/parts');
+const fileUpload = require('express-fileupload');
 
 const app = express();
 
@@ -18,6 +18,8 @@ emsDB.connect(()=>{
 app.use(bp.json())
 app.use(bp.urlencoded({ extended: true }))
 
+app.use(express.static('./public'));
+app.use(fileUpload());
 app.use('/',partsRouter);
 
 app.listen(4000,()=>{
