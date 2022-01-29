@@ -2,18 +2,45 @@ const csvtojson = require('csvtojson');
 const emsDB = require('../database/connect');
 
 const addTaxonomy = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `create table if not exists taxonomy(part_number VARCHAR(255) NOT NULL PRIMARY KEY,
-            family VARCHAR(255), taxonomy VARCHAR(255)); insert ignore into taxonomy set ?`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `create table if not exists taxonomy(part_number VARCHAR(255) NOT NULL PRIMARY KEY,
+                family VARCHAR(255), taxonomy VARCHAR(255)); insert ignore into taxonomy set ?`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('New taxonomy added');
+        res.status(200).send('New Taxonomy Added ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `create table if not exists taxonomy(part_number VARCHAR(255) NOT NULL PRIMARY KEY,
+                        family VARCHAR(255), taxonomy VARCHAR(255)); insert ignore into taxonomy set ?`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('New Taxonomy Added ...')
+    }
 }
 
 const getTaxonomy = (req, res) => {
@@ -42,45 +69,123 @@ const getTaxonomy = (req, res) => {
 }
 
 const updateTaxonomy = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `update taxonomy set taxonomy="${row.taxonomy}" , family="${row.family}" where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `update taxonomy set taxonomy="${row.taxonomy}" , family="${row.family}" where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Taxonokmy Updated');
+        res.status(200).send('Taxonomy Updated ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `update taxonomy set taxonomy="${row.taxonomy}" , family="${row.family}" where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Taxonomy Updated ...')
+    }
 }
 
 const deleteTaxonomy = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `delete from taxonomy where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `delete from taxonomy where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Taxonomy Deleted');
+        res.status(200).send('Taxonomy Delted ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `delete from taxonomy where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Taxonomy Deleted ...')
+    }
 }
 
 const addPackage = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `create table if not exists package (part_number varchar(255) NOT NULL PRIMARY KEY, package_name varchar(255)); insert ignore into package set ?`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `create table if not exists package (part_number varchar(255) NOT NULL PRIMARY KEY, package_name varchar(255)); insert ignore into package set ?`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('New package added');
+        res.status(200).send("New Package Added ...")
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else{
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `create table if not exists package (part_number varchar(255) NOT NULL PRIMARY KEY, package_name varchar(255)); insert ignore into package set ?`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+            res.status(200).send("New Package Added ...")
+        })
+    }
 }
 
 const getPackage = (req, res) => {
@@ -109,46 +214,124 @@ const getPackage = (req, res) => {
 }
 
 const updatePackage = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `update package set package_name="${row.package_name}" where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `update package set package_name="${row.package_name}" where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Package Updated');
+        res.status(200).send('Package Updated ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `update package set package_name="${row.package_name}" where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Package Updated ...')
+    }
 }
 
 const deletePackage = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `delete from package where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `delete from package where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Package Deleted');
+        res.status(200).send('Package Delted ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `delete from package where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Package Deleted ...')
+    }
 }
 
 //create pricing controllers
 const addPrice = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `create table if not exists price (part_number varchar(255) NOT NULL PRIMARY KEY, price float); insert ignore into price set ?`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `create table if not exists price (part_number varchar(255) NOT NULL PRIMARY KEY, price float); insert ignore into price set ?`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('New prices added');
+        res.status(200).send("New Prices Added ...")
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else{
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `create table if not exists price (part_number varchar(255) NOT NULL PRIMARY KEY, price float); insert ignore into price set ?`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+            res.status(200).send("New Prices Added ...")
+        })
+    }
 }
 
 const getPrice = (req, res) => {
@@ -177,47 +360,124 @@ const getPrice = (req, res) => {
 }
 
 const updatePrice = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `update price set price="${row.price}" where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `update price set price="${row.price}" where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Price Updated');
+        res.status(200).send('Price Updated ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `update price set price="${row.price}" where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Price Updated ...')
+    }
 }
 
 const deletePrice = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `delete from price where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `delete from price where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Price Deleted');
-}
+        res.status(200).send('Price Delted ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
 
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `delete from price where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Price Deleted ...')
+    }
+}
 
 //create stock controllers
 const addStock = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `create table if not exists stock (part_number varchar(255) NOT NULL PRIMARY KEY, stock int); insert ignore into stock set ?`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `create table if not exists stock (part_number varchar(255) NOT NULL PRIMARY KEY, stock int); insert ignore into stock set ?`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('New stock added');
+        res.status(200).send('New Stock Added ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `create table if not exists stock (part_number varchar(255) NOT NULL PRIMARY KEY, stock int); insert ignore into stock set ?`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('New Stock Added ...')
+    }
 }
 
 const getStock = (req, res) => {
@@ -246,46 +506,124 @@ const getStock = (req, res) => {
 }
 
 const updateStock = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `update stock set stock="${row.stock}" where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `update stock set stock="${row.stock}" where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Stock Updated');
+        res.status(200).send('Stock Updated ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `update stock set stock="${row.stock}" where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Stock Updated ...')
+    }
 }
 
 const deleteStock = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `delete from stock where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `delete from stock where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Stock Deleted');
+        res.status(200).send('Stock Delted ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `delete from stock where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Stock Deleted ...')
+    }
 }
 
 //add manufactures/suppliers
 const addSupplier = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `create table if not exists supplier (part_number varchar(255) NOT NULL PRIMARY KEY, supplier varchar(255)); insert ignore into supplier set ?`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `create table if not exists supplier (part_number varchar(255) NOT NULL PRIMARY KEY, supplier varchar(255)); insert ignore into supplier set ?`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('New supplier added');
+        res.status(200).send('New Suppliers Added ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `create table if not exists supplier (part_number varchar(255) NOT NULL PRIMARY KEY, supplier varchar(255)); insert ignore into supplier set ?`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('New Suppliers Added ...')
+    }
 }
 
 const getSupplier = (req, res) => {
@@ -314,46 +652,124 @@ const getSupplier = (req, res) => {
 }
 
 const updateSupplier = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `update supplier set supplier="${row.supplier}" where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `update supplier set supplier="${row.supplier}" where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Supplier Updated');
+        res.status(200).send('Supplier Updated ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `update supplier set supplier="${row.supplier}" where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Supplier Updated ...')
+    }
 }
 
 const deleteSupplier = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `delete from supplier where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `delete from supplier where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Supplier Deleted');
+        res.status(200).send('Supplier Delted ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `delete from supplier where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Supplier Deleted ...')
+    }
 }
 
 //add part status
 const addStatus = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `create table if not exists status (part_number varchar(255) NOT NULL PRIMARY KEY, status varchar(255)); insert ignore into status set ?`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `create table if not exists status (part_number varchar(255) NOT NULL PRIMARY KEY, status varchar(255)); insert ignore into status set ?`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('New status added');
+        res.status(200).send('New Status Added ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `create table if not exists status (part_number varchar(255) NOT NULL PRIMARY KEY, status varchar(255)); insert ignore into status set ?`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('New Status Added ...')
+    }
 }
 
 const getStatus = (req, res) => {
@@ -382,31 +798,84 @@ const getStatus = (req, res) => {
 }
 
 const updateStatus = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `update status set status="${row.status}" where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `update status set status="${row.status}" where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Status Updated');
+        res.status(200).send('Status Updated ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `update status set status="${row.status}" where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Status Updated ...')
+    }
 }
 
 const deleteStatus = (req, res) => {
-    csvtojson().fromFile(req.body.path).then((result) => {
-        result.forEach((row) => {
-            const sql = `delete from status where part_number="${row.part_number}"`;
-            emsDB.query(sql, row, (err, result) => {
-                if (err) {
-                    throw err;
-                }
+
+    if (req.body.path) {
+        const filePath = req.body.path;
+        csvtojson().fromFile(filePath).then((result) => {
+            result.forEach((row) => {
+                const sql = `delete from status where part_number="${row.part_number}"`;
+                emsDB.query(sql, row, (err, result) => {
+                    if (err) {
+                        throw err;
+                    }
+                })
             })
         })
-    })
-    res.status(200).send('Status Deleted');
+        res.status(200).send('Status Delted ...');
+    }
+    else if (req.files.uploadFile.mimetype === 'text/csv') {
+        const uploadedFile = req.files.uploadFile;
+        const filePath = "uploads/" + uploadedFile.name;
+
+        uploadedFile.mv(filePath, (err) => {
+            if (err) {
+                console.log(err)
+            }
+            else {
+                csvtojson().fromFile(filePath).then((result) => {
+                    result.forEach((row) => {
+                        const sql = `delete from status where part_number="${row.part_number}"`;
+                        emsDB.query(sql, row, (err, result) => {
+                            if (err) {
+                                throw err;
+                            }
+                        })
+                    })
+                })
+            }
+        })
+        res.status(200).send('Status Deleted ...')
+    }
 }
 
 const exportParts = (req, res) => {
