@@ -121,7 +121,7 @@ const deleteTaxonomy = (req, res) => {
                 })
             })
         })
-        res.status(200).send('Taxonomy Delted ...');
+        res.status(200).send('Taxonomy Deleted ...');
     }
     else if (req.files.uploadFile.mimetype === 'text/csv') {
         const uploadedFile = req.files.uploadFile;
