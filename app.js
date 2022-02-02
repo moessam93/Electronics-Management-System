@@ -1,7 +1,7 @@
 const express = require('express');
 const bp = require('body-parser');
 const emsDB = require('./database/connect');
-const mainRouter = require('./routes/parts');
+const mainRouter = require('./routes/main');
 const fileUpload = require('express-fileupload');
 const app = express();
 require('dotenv').config();
