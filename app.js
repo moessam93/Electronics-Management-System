@@ -1,7 +1,7 @@
 const express = require('express');
 const bp = require('body-parser');
 const emsDB = require('./database/connect');
-const partsRouter = require('./routes/parts');
+const mainRouter = require('./routes/parts');
 const fileUpload = require('express-fileupload');
 const app = express();
 require('dotenv').config();
@@ -20,7 +20,7 @@ app.use(bp.urlencoded({ extended: true }))
 
 app.use(express.static('./public'));
 app.use(fileUpload());
-app.use('/',partsRouter);
+app.use('/',mainRouter);
 const port=process.env.PORT || 8000;
 app.listen(port,()=>{
     console.log(`Server is listening to port ${port} ...`);
