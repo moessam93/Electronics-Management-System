@@ -1,7 +1,5 @@
 const csvtojson = require('csvtojson');
 const emsDB = require('../database/connect');
-const fs = require('fs');
-const jsontocsv = require('json-2-csv');
 
 const exportParts = (req, res) => {
     if (!req.body.path || !req.body.path.endsWith('.csv')) {
@@ -47,9 +45,6 @@ const exportParts = (req, res) => {
                 if (err) {
                     throw err;
                 }
-                jsontocsv.json2csv(result[0],(err,csv)=>{
-                    fs.writeFileSync('./export.csv',csv)
-                })
                 res.status(200).json(result[0]);
             })
         })
