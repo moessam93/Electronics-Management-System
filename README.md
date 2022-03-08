@@ -3,4 +3,16 @@ An electronic parts management system using NodeJS and SQL
 
 ## Technologies used
 NodeJS/ExpressJS <br/>
-MySQL
+MySQL<br/>
+
+##Usage
+
+###Install dependencies
+```
+npm install
+```
+
+###Run the node application
+```
+npm start
+```
