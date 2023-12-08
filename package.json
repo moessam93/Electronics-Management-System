@@ -27,6 +27,8 @@
     "express": "^4.17.2",
     "express-fileupload": "^1.2.1",
     "json-2-csv": "^3.17.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
   }
 }

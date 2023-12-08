@@ -3,8 +3,12 @@ const bp = require('body-parser');
 const emsDB = require('./config/mySqlDB');
 const mainRouter = require('./routes/main');
 const fileUpload = require('express-fileupload');
+const swaggerUi = require('swagger-ui-express');
+const swaggerSpec = require('./config/swagger');
+
 const app = express();
 require('dotenv').config();
+// Serve Swagger UI
 
 emsDB.connect(()=>{
     try {
@@ -13,6 +17,7 @@ emsDB.connect(()=>{
         console.log(error);
     }
 })
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //bodyparser
 app.use(bp.json())
