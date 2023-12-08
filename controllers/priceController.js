@@ -40,7 +40,18 @@ const addPrice = (req, res) => {
         })
     }
 }
-
+/**
+ * @swagger
+ * /api/price:
+ *   get:
+ *     summary: Get a list of parts prices
+ *     description: Retrieve a list of parts prices from the database.
+ *     responses:
+ *       200:
+ *         description: A list of parts prices.
+ *       500:
+ *         description: Internal server error.
+ */
 const getPrice = (req, res) => {
     if (!req.body.part_number) {
         const sql = `select * from price`;
