@@ -1,12 +1,12 @@
 const csvtojson = require('csvtojson');
-const emsDB = require('../database/connect');
+const emsDB = require('../config/mySqlDB');
 
-const addPackage = (req, res) => {
+const addPrice = (req, res) => {
     if (req.body.path) {
         const filePath = req.body.path;
         csvtojson().fromFile(filePath).then((result) => {
             result.forEach((row) => {
-                const sql = `create table if not exists package (part_number varchar(255) NOT NULL PRIMARY KEY, package_name varchar(255)); insert ignore into package set ?`;
+                const sql = `create table if not exists price (part_number varchar(255) NOT NULL PRIMARY KEY, price float); insert ignore into price set ?`;
                 emsDB.query(sql, row, (err, result) => {
                     if (err) {
                         throw err;
@@ -14,7 +14,7 @@ const addPackage = (req, res) => {
                 })
             })
         })
-        res.status(200).send("New Package Added ...")
+        res.status(200).send("New Prices Added ...")
     }
     else if (req.files.uploadFile.mimetype === 'text/csv') {
         const uploadedFile = req.files.uploadFile;
@@ -27,7 +27,7 @@ const addPackage = (req, res) => {
             else{
                 csvtojson().fromFile(filePath).then((result) => {
                     result.forEach((row) => {
-                        const sql = `create table if not exists package (part_number varchar(255) NOT NULL PRIMARY KEY, package_name varchar(255)); insert ignore into package set ?`;
+                        const sql = `create table if not exists price (part_number varchar(255) NOT NULL PRIMARY KEY, price float); insert ignore into price set ?`;
                         emsDB.query(sql, row, (err, result) => {
                             if (err) {
                                 throw err;
@@ -36,14 +36,14 @@ const addPackage = (req, res) => {
                     })
                 })
             }
-            res.status(200).send("New Package Added ...")
+            res.status(200).send("New Prices Added ...")
         })
     }
 }
 
-const getPackage = (req, res) => {
+const getPrice = (req, res) => {
     if (!req.body.part_number) {
-        const sql = `select * from package`;
+        const sql = `select * from price`;
         let query = emsDB.query(sql, (err, result) => {
             if (err) {
                 throw err;
@@ -52,7 +52,7 @@ const getPackage = (req, res) => {
         })
     }
     else {
-        let sql = `select * from package where part_number="${req.body.part_number}"`;
+        let sql = `select * from price where part_number="${req.body.part_number}"`;
         let query = emsDB.query(sql, (err, result) => {
             if (err) {
                 throw err;
@@ -66,12 +66,12 @@ const getPackage = (req, res) => {
     }
 }
 
-const updatePackage = (req, res) => {
+const updatePrice = (req, res) => {
     if (req.body.path) {
         const filePath = req.body.path;
         csvtojson().fromFile(filePath).then((result) => {
             result.forEach((row) => {
-                const sql = `update package set package_name="${row.package_name}" where part_number="${row.part_number}"`;
+                const sql = `update price set price="${row.price}" where part_number="${row.part_number}"`;
                 emsDB.query(sql, row, (err, result) => {
                     if (err) {
                         throw err;
@@ -79,7 +79,7 @@ const updatePackage = (req, res) => {
                 })
             })
         })
-        res.status(200).send('Package Updated ...');
+        res.status(200).send('Price Updated ...');
     }
     else if (req.files.uploadFile.mimetype === 'text/csv') {
         const uploadedFile = req.files.uploadFile;
@@ -92,7 +92,7 @@ const updatePackage = (req, res) => {
             else {
                 csvtojson().fromFile(filePath).then((result) => {
                     result.forEach((row) => {
-                        const sql = `update package set package_name="${row.package_name}" where part_number="${row.part_number}"`;
+                        const sql = `update price set price="${row.price}" where part_number="${row.part_number}"`;
                         emsDB.query(sql, row, (err, result) => {
                             if (err) {
                                 throw err;
@@ -102,16 +102,16 @@ const updatePackage = (req, res) => {
                 })
             }
         })
-        res.status(200).send('Package Updated ...')
+        res.status(200).send('Price Updated ...')
     }
 }
 
-const deletePackage = (req, res) => {
+const deletePrice = (req, res) => {
     if (req.body.path) {
         const filePath = req.body.path;
         csvtojson().fromFile(filePath).then((result) => {
             result.forEach((row) => {
-                const sql = `delete from package where part_number="${row.part_number}"`;
+                const sql = `delete from price where part_number="${row.part_number}"`;
                 emsDB.query(sql, row, (err, result) => {
                     if (err) {
                         throw err;
@@ -119,7 +119,7 @@ const deletePackage = (req, res) => {
                 })
             })
         })
-        res.status(200).send('Package Delted ...');
+        res.status(200).send('Price Delted ...');
     }
     else if (req.files.uploadFile.mimetype === 'text/csv') {
         const uploadedFile = req.files.uploadFile;
@@ -132,7 +132,7 @@ const deletePackage = (req, res) => {
             else {
                 csvtojson().fromFile(filePath).then((result) => {
                     result.forEach((row) => {
-                        const sql = `delete from package where part_number="${row.part_number}"`;
+                        const sql = `delete from price where part_number="${row.part_number}"`;
                         emsDB.query(sql, row, (err, result) => {
                             if (err) {
                                 throw err;
@@ -142,13 +142,13 @@ const deletePackage = (req, res) => {
                 })
             }
         })
-        res.status(200).send('Package Deleted ...')
+        res.status(200).send('Price Deleted ...')
     }
 }
 
 module.exports = {
-    addPackage,
-    getPackage,
-    updatePackage,
-    deletePackage
+    addPrice,
+    getPrice,
+    updatePrice,
+    deletePrice
 };

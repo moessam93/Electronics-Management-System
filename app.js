@@ -1,6 +1,6 @@
 const express = require('express');
 const bp = require('body-parser');
-const emsDB = require('./database/connect');
+const emsDB = require('./config/mySqlDB');
 const mainRouter = require('./routes/main');
 const fileUpload = require('express-fileupload');
 const app = express();

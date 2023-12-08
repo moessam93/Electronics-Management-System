@@ -1,5 +1,5 @@
 const csvtojson = require('csvtojson');
-const emsDB = require('../database/connect');
+const emsDB = require('../config/mySqlDB');
 
 const addTaxonomy = (req, res) => {
     if (req.body.path) {

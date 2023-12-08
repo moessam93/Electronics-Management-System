@@ -1,12 +1,12 @@
 const csvtojson = require('csvtojson');
-const emsDB = require('../database/connect');
+const emsDB = require('../config/mySqlDB');
 
-const addSupplier = (req, res) => {
+const addStatus = (req, res) => {
     if (req.body.path) {
         const filePath = req.body.path;
         csvtojson().fromFile(filePath).then((result) => {
             result.forEach((row) => {
-                const sql = `create table if not exists supplier (part_number varchar(255) NOT NULL PRIMARY KEY, supplier varchar(255)); insert ignore into supplier set ?`;
+                const sql = `create table if not exists status (part_number varchar(255) NOT NULL PRIMARY KEY, status varchar(255)); insert ignore into status set ?`;
                 emsDB.query(sql, row, (err, result) => {
                     if (err) {
                         throw err;
@@ -14,7 +14,7 @@ const addSupplier = (req, res) => {
                 })
             })
         })
-        res.status(200).send('New Suppliers Added ...');
+        res.status(200).send('New Status Added ...');
     }
     else if (req.files.uploadFile.mimetype === 'text/csv') {
         const uploadedFile = req.files.uploadFile;
@@ -27,7 +27,7 @@ const addSupplier = (req, res) => {
             else {
                 csvtojson().fromFile(filePath).then((result) => {
                     result.forEach((row) => {
-                        const sql = `create table if not exists supplier (part_number varchar(255) NOT NULL PRIMARY KEY, supplier varchar(255)); insert ignore into supplier set ?`;
+                        const sql = `create table if not exists status (part_number varchar(255) NOT NULL PRIMARY KEY, status varchar(255)); insert ignore into status set ?`;
                         emsDB.query(sql, row, (err, result) => {
                             if (err) {
                                 throw err;
@@ -37,13 +37,13 @@ const addSupplier = (req, res) => {
                 })
             }
         })
-        res.status(200).send('New Suppliers Added ...')
+        res.status(200).send('New Status Added ...')
     }
 }
 
-const getSupplier = (req, res) => {
+const getStatus = (req, res) => {
     if (!req.body.part_number) {
-        const sql = `select * from supplier`;
+        const sql = `select * from status`;
         let query = emsDB.query(sql, (err, result) => {
             if (err) {
                 throw err;
@@ -52,7 +52,7 @@ const getSupplier = (req, res) => {
         })
     }
     else {
-        let sql = `select * from supplier where part_number="${req.body.part_number}"`;
+        let sql = `select * from status where part_number="${req.body.part_number}"`;
         let query = emsDB.query(sql, (err, result) => {
             if (err) {
                 throw err;
@@ -66,12 +66,12 @@ const getSupplier = (req, res) => {
     }
 }
 
-const updateSupplier = (req, res) => {
+const updateStatus = (req, res) => {
     if (req.body.path) {
         const filePath = req.body.path;
         csvtojson().fromFile(filePath).then((result) => {
             result.forEach((row) => {
-                const sql = `update supplier set supplier="${row.supplier}" where part_number="${row.part_number}"`;
+                const sql = `update status set status="${row.status}" where part_number="${row.part_number}"`;
                 emsDB.query(sql, row, (err, result) => {
                     if (err) {
                         throw err;
@@ -79,7 +79,7 @@ const updateSupplier = (req, res) => {
                 })
             })
         })
-        res.status(200).send('Supplier Updated ...');
+        res.status(200).send('Status Updated ...');
     }
     else if (req.files.uploadFile.mimetype === 'text/csv') {
         const uploadedFile = req.files.uploadFile;
@@ -92,7 +92,7 @@ const updateSupplier = (req, res) => {
             else {
                 csvtojson().fromFile(filePath).then((result) => {
                     result.forEach((row) => {
-                        const sql = `update supplier set supplier="${row.supplier}" where part_number="${row.part_number}"`;
+                        const sql = `update status set status="${row.status}" where part_number="${row.part_number}"`;
                         emsDB.query(sql, row, (err, result) => {
                             if (err) {
                                 throw err;
@@ -102,16 +102,16 @@ const updateSupplier = (req, res) => {
                 })
             }
         })
-        res.status(200).send('Supplier Updated ...')
+        res.status(200).send('Status Updated ...')
     }
 }
 
-const deleteSupplier = (req, res) => {
+const deleteStatus = (req, res) => {
     if (req.body.path) {
         const filePath = req.body.path;
         csvtojson().fromFile(filePath).then((result) => {
             result.forEach((row) => {
-                const sql = `delete from supplier where part_number="${row.part_number}"`;
+                const sql = `delete from status where part_number="${row.part_number}"`;
                 emsDB.query(sql, row, (err, result) => {
                     if (err) {
                         throw err;
@@ -119,7 +119,7 @@ const deleteSupplier = (req, res) => {
                 })
             })
         })
-        res.status(200).send('Supplier Delted ...');
+        res.status(200).send('Status Delted ...');
     }
     else if (req.files.uploadFile.mimetype === 'text/csv') {
         const uploadedFile = req.files.uploadFile;
@@ -132,7 +132,7 @@ const deleteSupplier = (req, res) => {
             else {
                 csvtojson().fromFile(filePath).then((result) => {
                     result.forEach((row) => {
-                        const sql = `delete from supplier where part_number="${row.part_number}"`;
+                        const sql = `delete from status where part_number="${row.part_number}"`;
                         emsDB.query(sql, row, (err, result) => {
                             if (err) {
                                 throw err;
@@ -142,13 +142,13 @@ const deleteSupplier = (req, res) => {
                 })
             }
         })
-        res.status(200).send('Supplier Deleted ...')
+        res.status(200).send('Status Deleted ...')
     }
 }
 
 module.exports = {
-    addSupplier,
-    getSupplier,
-    updateSupplier,
-    deleteSupplier
+    addStatus,
+    getStatus,
+    updateStatus,
+    deleteStatus
 };

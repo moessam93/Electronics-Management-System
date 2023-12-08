@@ -1,12 +1,12 @@
 const csvtojson = require('csvtojson');
-const emsDB = require('../database/connect');
+const emsDB = require('../config/mySqlDB');
 
-const addStock = (req, res) => {
+const addPackage = (req, res) => {
     if (req.body.path) {
         const filePath = req.body.path;
         csvtojson().fromFile(filePath).then((result) => {
             result.forEach((row) => {
-                const sql = `create table if not exists stock (part_number varchar(255) NOT NULL PRIMARY KEY, stock int); insert ignore into stock set ?`;
+                const sql = `create table if not exists package (part_number varchar(255) NOT NULL PRIMARY KEY, package_name varchar(255)); insert ignore into package set ?`;
                 emsDB.query(sql, row, (err, result) => {
                     if (err) {
                         throw err;
@@ -14,7 +14,7 @@ const addStock = (req, res) => {
                 })
             })
         })
-        res.status(200).send('New Stock Added ...');
+        res.status(200).send("New Package Added ...")
     }
     else if (req.files.uploadFile.mimetype === 'text/csv') {
         const uploadedFile = req.files.uploadFile;
@@ -24,10 +24,10 @@ const addStock = (req, res) => {
             if (err) {
                 console.log(err)
             }
-            else {
+            else{
                 csvtojson().fromFile(filePath).then((result) => {
                     result.forEach((row) => {
-                        const sql = `create table if not exists stock (part_number varchar(255) NOT NULL PRIMARY KEY, stock int); insert ignore into stock set ?`;
+                        const sql = `create table if not exists package (part_number varchar(255) NOT NULL PRIMARY KEY, package_name varchar(255)); insert ignore into package set ?`;
                         emsDB.query(sql, row, (err, result) => {
                             if (err) {
                                 throw err;
@@ -36,14 +36,14 @@ const addStock = (req, res) => {
                     })
                 })
             }
+            res.status(200).send("New Package Added ...")
         })
-        res.status(200).send('New Stock Added ...')
     }
 }
 
-const getStock = (req, res) => {
+const getPackage = (req, res) => {
     if (!req.body.part_number) {
-        const sql = `select * from stock`;
+        const sql = `select * from package`;
         let query = emsDB.query(sql, (err, result) => {
             if (err) {
                 throw err;
@@ -52,7 +52,7 @@ const getStock = (req, res) => {
         })
     }
     else {
-        let sql = `select * from stock where part_number="${req.body.part_number}"`;
+        let sql = `select * from package where part_number="${req.body.part_number}"`;
         let query = emsDB.query(sql, (err, result) => {
             if (err) {
                 throw err;
@@ -66,12 +66,12 @@ const getStock = (req, res) => {
     }
 }
 
-const updateStock = (req, res) => {
+const updatePackage = (req, res) => {
     if (req.body.path) {
         const filePath = req.body.path;
         csvtojson().fromFile(filePath).then((result) => {
             result.forEach((row) => {
-                const sql = `update stock set stock="${row.stock}" where part_number="${row.part_number}"`;
+                const sql = `update package set package_name="${row.package_name}" where part_number="${row.part_number}"`;
                 emsDB.query(sql, row, (err, result) => {
                     if (err) {
                         throw err;
@@ -79,7 +79,7 @@ const updateStock = (req, res) => {
                 })
             })
         })
-        res.status(200).send('Stock Updated ...');
+        res.status(200).send('Package Updated ...');
     }
     else if (req.files.uploadFile.mimetype === 'text/csv') {
         const uploadedFile = req.files.uploadFile;
@@ -92,7 +92,7 @@ const updateStock = (req, res) => {
             else {
                 csvtojson().fromFile(filePath).then((result) => {
                     result.forEach((row) => {
-                        const sql = `update stock set stock="${row.stock}" where part_number="${row.part_number}"`;
+                        const sql = `update package set package_name="${row.package_name}" where part_number="${row.part_number}"`;
                         emsDB.query(sql, row, (err, result) => {
                             if (err) {
                                 throw err;
@@ -102,16 +102,16 @@ const updateStock = (req, res) => {
                 })
             }
         })
-        res.status(200).send('Stock Updated ...')
+        res.status(200).send('Package Updated ...')
     }
 }
 
-const deleteStock = (req, res) => {
+const deletePackage = (req, res) => {
     if (req.body.path) {
         const filePath = req.body.path;
         csvtojson().fromFile(filePath).then((result) => {
             result.forEach((row) => {
-                const sql = `delete from stock where part_number="${row.part_number}"`;
+                const sql = `delete from package where part_number="${row.part_number}"`;
                 emsDB.query(sql, row, (err, result) => {
                     if (err) {
                         throw err;
@@ -119,7 +119,7 @@ const deleteStock = (req, res) => {
                 })
             })
         })
-        res.status(200).send('Stock Delted ...');
+        res.status(200).send('Package Delted ...');
     }
     else if (req.files.uploadFile.mimetype === 'text/csv') {
         const uploadedFile = req.files.uploadFile;
@@ -132,7 +132,7 @@ const deleteStock = (req, res) => {
             else {
                 csvtojson().fromFile(filePath).then((result) => {
                     result.forEach((row) => {
-                        const sql = `delete from stock where part_number="${row.part_number}"`;
+                        const sql = `delete from package where part_number="${row.part_number}"`;
                         emsDB.query(sql, row, (err, result) => {
                             if (err) {
                                 throw err;
@@ -142,13 +142,13 @@ const deleteStock = (req, res) => {
                 })
             }
         })
-        res.status(200).send('Stock Deleted ...')
+        res.status(200).send('Package Deleted ...')
     }
 }
 
 module.exports = {
-    addStock,
-    getStock,
-    updateStock,
-    deleteStock
+    addPackage,
+    getPackage,
+    updatePackage,
+    deletePackage
 };
