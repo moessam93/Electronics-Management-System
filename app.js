@@ -8,7 +8,6 @@ const swaggerSpec = require('./config/swagger');
 
 const app = express();
 require('dotenv').config();
-// Serve Swagger UI
 
 emsDB.connect(()=>{
     try {
@@ -16,7 +15,9 @@ emsDB.connect(()=>{
     } catch (error) {
         console.log(error);
     }
-})
+});
+
+// Serve Swagger UI
 app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 //bodyparser
