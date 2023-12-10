@@ -11,5 +11,5 @@ const {
 
 router.route('/').post(addPrice).patch(updatePrice).delete(deletePrice);
 router.route('/All').get(getAllPrices);
-router.route('/:part_number').get(getPriceByPartNumber);
+router.route('/:partNumber').get(getPriceByPartNumber);
 module.exports = router;
